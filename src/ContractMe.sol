@@ -2,9 +2,8 @@
 pragma solidity ^0.8.23;
 
 /**
- * @title ContractMe
+ * @title ContractMe - FIXED VERSION
  * @dev A buy-in system with logarithmic cost increase and prize pool management
- * @author amaucher
  */
 contract ContractMe {
     // State variables
@@ -50,17 +49,18 @@ contract ContractMe {
     /**
      * @dev Calculate current action cost using logarithmic formula
      * Feeₙ = BaseFee × (1 + log₂(n + 1))
+     * FIXED VERSION - corrected overflow issue
      */
     function actionCost() public view returns (uint256) {
         if (buyInCount == 0) {
             return baseFee;
         }
         
-        // Calculate log₂(buyInCount + 1)
+        // Calculate log₂(buyInCount + 1) - returns integer part only
         uint256 logValue = log2(buyInCount + 1);
         
         // Fee = BaseFee × (1 + log₂(n + 1))
-        // Using fixed point arithmetic with 18 decimals
+        // Using simple integer math to avoid overflow
         uint256 multiplier = 1 ether + (logValue * 1 ether);
         return (baseFee * multiplier) / 1 ether;
     }
@@ -95,11 +95,11 @@ contract ContractMe {
         
         // Calculate owner fee (5%) and prize pool amount (95%)
         uint256 ownerFee = (currentCost * OWNER_FEE_PERCENTAGE) / PERCENTAGE_BASE;
-        uint256 prizePoolAmount = currentCost - ownerFee;
+        uint256 prizePoolShare = currentCost - ownerFee;
         
         // Update state
         buyInCount++;
-        prizePool += prizePoolAmount;
+        prizePool += prizePoolShare;
         ownerFees += ownerFee;
         
         // Refund excess payment if any
@@ -156,9 +156,9 @@ contract ContractMe {
      * @dev Owner-only function to drain all funds and reset state
      */
     function drain() external onlyOwner {
-        uint256 prizePoolAmount = prizePool;
-        uint256 ownerFeesAmount = ownerFees;
-        uint256 totalAmount = prizePoolAmount + ownerFeesAmount;
+        uint256 currentPrizePool = prizePool;
+        uint256 currentOwnerFees = ownerFees;
+        uint256 totalAmount = currentPrizePool + currentOwnerFees;
         
         // Reset state
         prizePool = 0;
@@ -170,7 +170,7 @@ contract ContractMe {
             payable(owner).transfer(totalAmount);
         }
         
-        emit ContractDrained(prizePoolAmount, ownerFeesAmount);
+        emit ContractDrained(currentPrizePool, currentOwnerFees);
     }
     
     /**
@@ -191,8 +191,8 @@ contract ContractMe {
     }
     
     /**
-     * @dev Calculate log₂ of a number using bit manipulation
-     * Returns the result with 18 decimal places
+     * @dev Calculate log₂ of a number - FIXED VERSION
+     * Returns integer result only (no decimals)
      */
     function log2(uint256 x) internal pure returns (uint256) {
         require(x > 0, "Cannot calculate log of zero");
@@ -208,10 +208,8 @@ contract ContractMe {
             result++;
         }
         
-        // Simple approximation for fractional part
-        // This gives us a rough approximation of log₂
-        // For more precision, you could implement a more sophisticated algorithm
-        return result * 1 ether;
+        // Return integer result only - no multiplication by 1 ether
+        return result;
     }
     
     /**
@@ -222,7 +220,7 @@ contract ContractMe {
     }
     
     /**
-     * @dev Emergency function to pause contract (optional safety feature)
+     * @dev Emergency function to pause contract
      */
     bool public paused = false;
     
@@ -234,10 +232,4 @@ contract ContractMe {
     function togglePause() external onlyOwner {
         paused = !paused;
     }
-    
-    // Add pause protection to critical functions
-    function buyIn_safe() external payable whenNotPaused {
-        // This would replace buyIn() if you want pause functionality
-        // For now, keeping the original buyIn() as requested
-    }
-} 
+}
