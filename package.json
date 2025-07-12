@@ -1,0 +1,44 @@
+{
+  "name": "chiliz-contractme",
+  "version": "1.0.0",
+  "description": "ContractMe - A buy-in system smart contract for Chiliz Chain",
+  "main": "hardhat.config.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:spicy": "hardhat run src/deploy.js --network spicy",
+    "deploy:chiliz": "hardhat run src/deploy.js --network chiliz",
+    "deploy:local": "hardhat run src/deploy.js --network hardhat",
+    "verify:spicy": "hardhat verify --network spicy",
+    "verify:chiliz": "hardhat verify --network chiliz",
+    "node": "hardhat node",
+    "clean": "hardhat clean",
+    "size": "hardhat size-contracts"
+  },
+  "keywords": [
+    "solidity",
+    "smart-contracts",
+    "chiliz",
+    "blockchain",
+    "hardhat",
+    "ethereum"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@openzeppelin/contracts": "^4.9.3",
+    "chai": "^4.3.7",
+    "dotenv": "^16.3.1",
+    "ethereum-waffle": "^4.0.10",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.17.1",
+    "hardhat-contract-sizer": "^2.10.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
