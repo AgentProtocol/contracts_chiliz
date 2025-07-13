@@ -203,7 +203,3 @@ For questions or issues:
 - Create an issue in this repository
 - Check the [Chiliz Chain documentation](https://docs.chiliz.com)
 - Join the Chiliz community Discord
-
----
-
-Built with ❤️ for the Chiliz Chain ecosystem
