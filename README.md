@@ -1,6 +1,6 @@
 # ContractMe - Chiliz Chain Smart Contract
 
-A buy-in system smart contract built Chiliz Chain that implements logarithmic cost scaling and prize pool management.
+A buy-in system smart contract built on Chiliz Chain that implements logarithmic cost scaling and prize pool management.
 
 ## 🏟️ Features
 
